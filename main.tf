@@ -28,11 +28,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   comment             = "Some comment"
   default_root_object = "index.html"
 
-#  logging_config {
-#    include_cookies = false
-#    bucket          = "mylogs.s3.amazonaws.com"
-#    prefix          = "myprefix"
-#  }
+  #  logging_config {
+  #    include_cookies = false
+  #    bucket          = "mylogs.s3.amazonaws.com"
+  #    prefix          = "myprefix"
+  #  }
 
   aliases = ["resume.malavear.com"]
 
@@ -136,7 +136,8 @@ resource "aws_s3_bucket_policy" "allow_access_cloudfront" {
 data "aws_iam_policy_document" "allow_access_cloudfront" {
   statement {
     principals {
-      type = "*"
+      type        = "*"
+      identifiers = ["*"]
     }
 
     actions = [
