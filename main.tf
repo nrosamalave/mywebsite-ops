@@ -1,3 +1,4 @@
+#S3 bucket
 resource "aws_s3_bucket" "b" {
   bucket = local.name
 }
@@ -7,19 +8,14 @@ data "aws_acm_certificate" "issued" {
   domain = "*.malavear.com"
 }
 
-#resource "aws_s3_bucket_acl" "b_acl" {
-#  bucket = aws_s3_bucket.b.id
-#  acl    = "private"
-#}
-
 locals {
   s3_origin_id = "myS3Origin"
 }
 
+#CloudFront distribution
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = aws_s3_bucket.b.bucket_regional_domain_name
-    #origin_access_control_id = aws_cloudfront_origin_access_control.default.id
     origin_id = local.s3_origin_id
   }
 
@@ -27,12 +23,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   is_ipv6_enabled     = true
   comment             = "Some comment"
   default_root_object = "index.html"
-
-  #  logging_config {
-  #    include_cookies = false
-  #    bucket          = "mylogs.s3.amazonaws.com"
-  #    prefix          = "myprefix"
-  #  }
 
   aliases = ["resume.malavear.com"]
 
@@ -119,6 +109,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 }
 
+#Access block, makes S3 bucket public
 resource "aws_s3_bucket_public_access_block" "example" {
   bucket = aws_s3_bucket.b.id
 
@@ -133,6 +124,7 @@ resource "aws_s3_bucket_policy" "allow_access_cloudfront" {
   policy = data.aws_iam_policy_document.allow_access_cloudfront.json
 }
 
+#IAM role to allow communication between CloudFront and S3
 data "aws_iam_policy_document" "allow_access_cloudfront" {
   statement {
     principals {
