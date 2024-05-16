@@ -136,8 +136,7 @@ resource "aws_s3_bucket_policy" "allow_access_cloudfront" {
 data "aws_iam_policy_document" "allow_access_cloudfront" {
   statement {
     principals {
-      type = "Service"
-      identifiers = ["cloudfront.amazonaws.com"]
+      type = "*"
     }
 
     actions = [
@@ -145,7 +144,6 @@ data "aws_iam_policy_document" "allow_access_cloudfront" {
     ]
 
     resources = [
-      aws_s3_bucket.b.arn,
       "${aws_s3_bucket.b.arn}/*",
     ]
   }
