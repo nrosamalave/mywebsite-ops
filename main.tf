@@ -7,10 +7,10 @@ data "aws_acm_certificate" "issued" {
   domain = "*.malavear.com"
 }
 
-resource "aws_s3_bucket_acl" "b_acl" {
-  bucket = aws_s3_bucket.b.id
-  acl    = "private"
-}
+#resource "aws_s3_bucket_acl" "b_acl" {
+#  bucket = aws_s3_bucket.b.id
+#  acl    = "private"
+#}
 
 locals {
   s3_origin_id = "myS3Origin"
@@ -115,5 +115,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   viewer_certificate {
     acm_certificate_arn = data.aws_acm_certificate.issued.arn
+    ssl_support_method  = static-ip
   }
 }
