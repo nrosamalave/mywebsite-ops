@@ -18,9 +18,3 @@ variable "region" {
     error_message = "Invalid AWS region: us-east-1, us-east-2"
   }
 }
-
-variable "cert" {
-  description = "SSL Certificate"
-  type        = string
-  sensitive   = true
-}
