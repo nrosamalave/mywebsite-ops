@@ -127,3 +127,26 @@ resource "aws_s3_bucket_public_access_block" "example" {
   ignore_public_acls      = false
   restrict_public_buckets = false
 }
+
+resource "aws_s3_bucket_policy" "allow_access_cloudfront" {
+  bucket = aws_s3_bucket.b.id
+  policy = data.aws_iam_policy_document.allow_access_cloudfront.json
+}
+
+data "aws_iam_policy_document" "allow_access_cloudfront" {
+  statement {
+    principals {
+      type = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      aws_s3_bucket.b.arn,
+      "${aws_s3_bucket.b.arn}/*",
+    ]
+  }
+}
