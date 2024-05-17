@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "subnet1" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.0.0/25"
-  availability_zone = "us-east-1a" # Change to your preferred AZ
+  availability_zone = "us-east-1a", "us-east-1b" # Change to your preferred AZ
 }
 
 resource "aws_security_group" "rds_sg" {
@@ -64,7 +64,7 @@ resource "aws_db_instance" "main" {
   allocated_storage    = 20
   engine               = "mysql"
   engine_version       = "8.0"
-  instance_class       = "db.t3.micro"
+  instance_class       = "db.t2.micro"
   db_name                 = "mydatabase"
   manage_master_user_password = true
   username             = "admin"
