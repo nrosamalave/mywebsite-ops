@@ -5,8 +5,13 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "subnet1" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.0.0/25"
-  availability_zone = "us-east-1a"
-  "us-east-1b" # Change to your preferred AZ
+  availability_zone = "us-east-1a" # Change to your preferred AZ
+}
+
+resource "aws_subnet" "subnet2" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/25"
+  availability_zone = "us-east-1b" # Change to your preferred AZ
 }
 
 resource "aws_security_group" "rds_sg" {
@@ -58,7 +63,7 @@ resource "aws_security_group" "web_sg" {
 
 resource "aws_db_subnet_group" "main" {
   name       = "main"
-  subnet_ids = [aws_subnet.subnet1.id]
+  subnet_ids = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
 }
 
 resource "aws_db_instance" "main" {
